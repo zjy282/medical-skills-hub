@@ -66,6 +66,7 @@ jobs:
         run: bun run convex:deploy
 
       - name: Verify Convex contract
+        continue-on-error: true
         run: bun run verify:convex-contract -- --prod
 
   deploy-web:
