@@ -63,7 +63,15 @@ function getRemoteIdentifiers(cliArgs: string[]) {
     process.exit(result.status ?? 1)
   }
 
-  const parsed = JSON.parse(result.stdout) as {
+  const stdout = result.stdout.trim()
+  const jsonStart = stdout.indexOf('{')
+  const jsonEnd = stdout.lastIndexOf('}')
+  if (jsonStart === -1 || jsonEnd === -1 || jsonEnd < jsonStart) {
+    process.stderr.write(stdout)
+    process.exit(1)
+  }
+
+  const parsed = JSON.parse(stdout.slice(jsonStart, jsonEnd + 1)) as {
     functions?: Array<{ identifier?: string }>
   }
   return new Set((parsed.functions ?? []).flatMap((entry) => (entry.identifier ? [entry.identifier] : [])))
