@@ -56,6 +56,7 @@ function getRemoteIdentifiers(cliArgs: string[]) {
   const result = spawnSync('bunx', ['convex', 'function-spec', ...cliArgs], {
     cwd: root,
     encoding: 'utf8',
+    maxBuffer: 16 * 1024 * 1024,
   })
   if (result.status !== 0) {
     process.stderr.write(result.stderr || result.stdout)
